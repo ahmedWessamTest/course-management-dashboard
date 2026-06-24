@@ -1,0 +1,11 @@
+<button
+  [class]="'btn btn-' + variant()"
+  [disabled]="disabled() || loading()"
+  [attr.aria-busy]="loading()"
+  [attr.aria-label]="ariaLabel() || null"
+  [type]="type()">
+  @if (loading()) {
+    <svg lucideLoader2 class="btn-spinner" aria-hidden="true"></svg>
+  }
+  <ng-content />
+</button>

@@ -1,0 +1,75 @@
+<div class="table-wrapper">
+    <app-empty-error-state [loading]="loading()" [error]="error()"
+        [empty]="!loading() && !error() && tableData().length === 0" emptyTitle="No courses found"
+        emptyMessage="Try adjusting your search or filter." (retry)="retry.emit()">
+
+        <div class="table-scroll">
+            <table class="data-table" role="grid">
+                <thead>
+                    <tr>
+                        @for (col of columns(); track col.key) {
+                        <th [style.width]="col.width || 'auto'" [class.sortable]="col.sortable"
+                            (click)="col.sortable ? sort.emit(col.key) : null"
+                            [attr.aria-sort]="col.sortable ? getSortDir(col.key) : null" scope="col">
+                            <span class="th-inner">
+                                {{ col.label }}
+                                @if (col.sortable) {
+                                <span class="sort-icon" aria-hidden="true">
+                                    @if (sortColumn() === col.key && sortDir() === 'asc') {
+                                    <svg lucideChevronUp></svg>
+                                    } @else if (sortColumn() === col.key && sortDir() === 'desc') {
+                                    <svg lucideChevronDown></svg>
+                                    } @else {
+                                    <svg lucideChevronsUpDown></svg>
+                                    }
+                                </span>
+                                }
+                            </span>
+                        </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (row of tableData(); track row.id) {
+                    <tr class="table-row" tabindex="0" (keydown.enter)="view.emit(row)"
+                        (keydown.space)="view.emit(row)">
+                        @for (col of columns(); track col.key) {
+                        <td>
+                            @if (col.renderAs === 'badge') {
+                            <app-badge [status]="getCellValue(row, col.key)" />
+                            } @else if (col.renderAs === 'toggle') {
+                            <app-toggle [toggleId]="'toggle-' + row.id" [ngModel]="getCellValue(row, col.key)"
+                                (ngModelChange)="toggleStatus.emit({ id: row.id, status: $event })" />
+                            } @else if (col.renderAs === 'actions') {
+                            <div class="action-btns">
+                                <button class="icon-btn icon-btn--view" (click)="view.emit(row)" type="button"
+                                    [attr.aria-label]="'View ' + row.title">
+                                    <svg lucideEye></svg>
+                                </button>
+                                <button class="icon-btn icon-btn--edit" (click)="edit.emit(row)" type="button"
+                                    [attr.aria-label]="'Edit ' + row.title">
+                                    <svg lucidePencil></svg>
+                                </button>
+                                <button class="icon-btn icon-btn--delete" (click)="delete.emit(row)" type="button"
+                                    [attr.aria-label]="'Delete ' + row.title">
+                                    <svg lucideTrash2></svg>
+                                </button>
+                            </div>
+                            } @else if (col.renderAs === 'currency') {
+                            <span>{{ '$' + getCellValue(row, col.key) }}</span>
+                            } @else if (col.renderAs === 'truncate') {
+                            <span [title]="getCellValue(row, col.key)">
+                                {{ (getCellValue(row, col.key)) | truncate:40 }}
+                            </span>
+                            } @else {
+                            {{ getCellValue(row, col.key) }}
+                            }
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </app-empty-error-state>
+</div>

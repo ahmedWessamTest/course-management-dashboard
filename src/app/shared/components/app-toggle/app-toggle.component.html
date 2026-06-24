@@ -1,0 +1,20 @@
+<div class="toggle-wrapper">
+  @if (label()) {
+    <span class="toggle-label" [id]="toggleId() + '-label'">{{ label() }}</span>
+  }
+  <button
+    type="button"
+    role="switch"
+    [id]="toggleId()"
+    class="toggle-track"
+    [class.toggle-track--on]="checked()"
+    [disabled]="isDisabled()"
+    [attr.aria-checked]="checked()"
+    [attr.aria-labelledby]="label() ? toggleId() + '-label' : null"
+    (click)="toggle()">
+    <span class="toggle-thumb" aria-hidden="true"></span>
+  </button>
+  <span class="toggle-status-label" [class.toggle-status-label--on]="checked()">
+    {{ checked() ? onLabel() : offLabel() }}
+  </span>
+</div>

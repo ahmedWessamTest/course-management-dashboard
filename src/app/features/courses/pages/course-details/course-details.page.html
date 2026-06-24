@@ -1,0 +1,98 @@
+<div class="page-container">
+    <app-page-header [title]="pageTitle()" subtitle="Course details">
+        <button class="btn btn-secondary" (click)="goBack()" type="button">
+            <svg lucideArrowLeft aria-hidden="true"></svg> Back
+        </button>
+        <button class="btn btn-primary" (click)="goToEdit()" type="button">
+            <svg lucidePencil aria-hidden="true"></svg> Edit
+        </button>
+    </app-page-header>
+
+    <app-empty-error-state [loading]="courseState.loading()" [error]="courseState.error()"
+        [empty]="!courseState.loading() && !courseState.error() && !courseState.selectedCourse()"
+        emptyTitle="Course not found" emptyMessage="This course does not exist or was removed." (retry)="reload()">
+
+        @if (courseState.selectedCourse(); as course) {
+        <div class="detail-layout">
+            <div class="hero-card">
+                <div class="hero-thumb">
+                    <img [src]="course.thumbnail" [alt]="course.title + ' thumbnail'" loading="eager" width="800"
+                        height="300" />
+                </div>
+                <div class="hero-body">
+                    <div class="hero-top">
+                        <div>
+                            <p class="hero-category">{{ course.category }}</p>
+                            <h2 class="hero-title">{{ course.title }}</h2>
+                            <p class="hero-instructor">By {{ course.instructor }}</p>
+                            <p class="hero-description">{{ course.description }}</p>
+                        </div>
+                        <app-badge [status]="course.status" />
+                    </div>
+
+                    <div class="hero-meta">
+                        <span class="meta-item">
+                            <svg lucideStar aria-hidden="true"></svg>
+                            {{ course.rating }} rating
+                        </span>
+                        <span class="meta-item">
+                            <svg lucideUsers aria-hidden="true"></svg>
+                            {{ course.studentsCount }} students
+                        </span>
+                        <span class="meta-item">
+                            <svg lucideClock aria-hidden="true"></svg>
+                            {{ course.duration }}h
+                        </span>
+                        <span class="meta-item meta-price">
+                            <svg lucideDollarSign aria-hidden="true"></svg>
+                            {{ course.price }}
+                        </span>
+                    </div>
+
+                    <div class="hero-toggle">
+                        <app-toggle [ngModel]="course.status"
+                            (ngModelChange)="courseState.toggleStatus(course.id, $event)" label="Status"
+                            onLabel="Published" offLabel="Unpublished" toggleId="detail-status-toggle" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-section">
+                <div class="tabs-nav" role="tablist">
+                    @for (tab of tabs; track tab.key) {
+                    <button class="tab-btn" [class.tab-btn--active]="activeTab() === tab.key"
+                        (click)="activeTab.set(tab.key)" role="tab" [attr.aria-selected]="activeTab() === tab.key"
+                        [attr.id]="'tab-' + tab.key" [attr.aria-controls]="'panel-' + tab.key" type="button">
+                        {{ tab.label }}
+                    </button>
+                    }
+                </div>
+
+                <div class="tab-panel" [id]="'panel-' + activeTab()" [attr.aria-labelledby]="'tab-' + activeTab()"
+                    role="tabpanel">
+                    @switch (activeTab()) {
+                    @case ('curriculum') {
+                    <div class="tab-placeholder">
+                        <svg lucideBookOpen class="placeholder-icon" aria-hidden="true"></svg>
+                        <p>Curriculum content will appear here once modules are added.</p>
+                    </div>
+                    }
+                    @case ('students') {
+                    <div class="tab-placeholder">
+                        <svg lucideUsers class="placeholder-icon" aria-hidden="true"></svg>
+                        <p>{{ courseState.selectedCourse()?.studentsCount }} students enrolled.</p>
+                    </div>
+                    }
+                    @case ('reviews') {
+                    <div class="tab-placeholder">
+                        <svg lucideStar class="placeholder-icon" aria-hidden="true"></svg>
+                        <p>Average rating: {{ courseState.selectedCourse()?.rating }}</p>
+                    </div>
+                    }
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </app-empty-error-state>
+</div>

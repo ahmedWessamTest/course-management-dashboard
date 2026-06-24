@@ -1,0 +1,58 @@
+<div class="page-container">
+    <app-page-header [title]="pageTitle()" [subtitle]="pageSubtitle()">
+        <button class="btn btn-secondary" (click)="goBack()" type="button">
+            <svg lucideArrowLeft aria-hidden="true"></svg> Back
+        </button>
+    </app-page-header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="course-form" novalidate>
+        <div class="form-card">
+            <h2 class="form-section-title">Basic Information</h2>
+            <div class="form-grid">
+                <app-input formControlName="title" label="Title" placeholder="e.g. Introduction to Angular"
+                    inputId="field-title" [errorMessage]="getError('title')" />
+
+                <app-input formControlName="slug" label="Slug" placeholder="auto-generated from title"
+                    inputId="field-slug" [errorMessage]="getError('slug')" />
+
+                <app-input formControlName="instructor" label="Instructor" placeholder="Full name"
+                    inputId="field-instructor" [errorMessage]="getError('instructor')" />
+
+                <app-input formControlName="category" type="select" label="Category" placeholder="Select a category"
+                    inputId="field-category" [options]="categoryOptions()" [errorMessage]="getError('category')" />
+
+                <app-input formControlName="price" type="number" label="Price ($)" placeholder="0" inputId="field-price"
+                    [errorMessage]="getError('price')" />
+
+                <app-input formControlName="duration" type="number" label="Duration (hours)" placeholder="e.g. 12"
+                    inputId="field-duration" [errorMessage]="getError('duration')" />
+            </div>
+
+            <app-input formControlName="thumbnail" type="url" label="Thumbnail URL" placeholder="https://..."
+                inputId="field-thumbnail" [errorMessage]="getError('thumbnail')" />
+
+            <div class="form-full">
+                <app-input formControlName="description" type="textarea" label="Description"
+                    placeholder="Describe what students will learn…" inputId="field-description"
+                    [errorMessage]="getError('description')" />
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2 class="form-section-title">Publication</h2>
+            <app-toggle formControlName="status" label="Course Status" onLabel="Published" offLabel="Unpublished"
+                toggleId="field-status" />
+            <p class="field-hint">
+                Published courses are visible to all students.
+            </p>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-secondary" (click)="goBack()" type="button">Cancel</button>
+            <app-button type="submit" variant="primary" [loading]="saving()" [disabled]="form.invalid">
+                <svg [lucideIcon]="isEditMode() ? LucideSave : LucidePlus" aria-hidden="true"></svg>
+                {{ submitLabel() }}
+            </app-button>
+        </div>
+    </form>
+</div>

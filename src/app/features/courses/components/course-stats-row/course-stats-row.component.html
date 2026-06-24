@@ -1,0 +1,13 @@
+<div class="stats-row" role="list">
+  @for (stat of stats(); track stat.label) {
+    <div class="stat-card" role="listitem">
+      <div class="stat-icon-wrap" [class]="stat.colorClass">
+        <svg [lucideIcon]="stat.icon" aria-hidden="true"></svg>
+      </div>
+      <div class="stat-info">
+        <p class="stat-value">{{ stat.value }}</p>
+        <p class="stat-label">{{ stat.label }}</p>
+      </div>
+    </div>
+  }
+</div>

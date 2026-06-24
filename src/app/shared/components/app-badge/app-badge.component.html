@@ -1,0 +1,4 @@
+<span class="badge" [class.badge--published]="status()" [class.badge--unpublished]="!status()">
+  <svg [lucideIcon]="status() ? LucideCheckCircle : LucideXCircle" class="badge-icon" aria-hidden="true"></svg>
+  {{ status() ? 'Published' : 'Unpublished' }}
+</span>

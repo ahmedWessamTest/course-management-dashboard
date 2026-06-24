@@ -1,0 +1,49 @@
+<div class="field" [class.field--error]="errorMessage()">
+  @if (label()) {
+    <label [for]="inputId()" class="field-label">{{ label() }}</label>
+  }
+  @if (type() === 'textarea') {
+    <textarea
+      [id]="inputId()"
+      class="field-control"
+      [placeholder]="placeholder()"
+      [disabled]="isDisabled()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+      rows="4"
+      [attr.aria-describedby]="errorMessage() ? inputId() + '-error' : null"
+      [attr.aria-invalid]="!!errorMessage()">
+    </textarea>
+  } @else if (type() === 'select') {
+    <select
+      [id]="inputId()"
+      class="field-control"
+      [disabled]="isDisabled()"
+      [value]="value()"
+      (change)="onInput($event)"
+      (blur)="onTouched()"
+      [attr.aria-describedby]="errorMessage() ? inputId() + '-error' : null"
+      [attr.aria-invalid]="!!errorMessage()">
+      <option value="">{{ placeholder() || 'Select an option' }}</option>
+      @for (opt of options(); track opt.value) {
+        <option [value]="opt.value">{{ opt.label }}</option>
+      }
+    </select>
+  } @else {
+    <input
+      [id]="inputId()"
+      class="field-control"
+      [type]="type()"
+      [placeholder]="placeholder()"
+      [disabled]="isDisabled()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+      [attr.aria-describedby]="errorMessage() ? inputId() + '-error' : null"
+      [attr.aria-invalid]="!!errorMessage()" />
+  }
+  @if (errorMessage()) {
+    <span [id]="inputId() + '-error'" class="field-error" role="alert">{{ errorMessage() }}</span>
+  }
+</div>

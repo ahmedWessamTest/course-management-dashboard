@@ -1,0 +1,88 @@
+<div class="page-container">
+  <app-page-header title="Courses" subtitle="Manage all your courses in one place">
+    <button class="btn btn-primary" (click)="goToNew()" type="button">
+      <svg lucidePlus aria-hidden="true"></svg>
+      New Course
+    </button>
+  </app-page-header>
+
+  <app-course-stats-row [stats]="statsCards()" />
+
+  <div class="toolbar">
+    <div class="toolbar-search">
+      <svg lucideSearch class="search-icon" aria-hidden="true"></svg>
+      <input
+        id="course-search"
+        type="search"
+        class="search-input"
+        placeholder="Search by title, instructor, category…"
+        [value]="tableService.searchQuery()"
+        (input)="onSearch($event)"
+        aria-label="Search courses"
+      />
+    </div>
+
+    <select
+      id="status-filter"
+      class="filter-select"
+      [value]="statusFilterValue()"
+      (change)="onStatusFilter($event)"
+      aria-label="Filter by status"
+    >
+      <option value="all">All statuses</option>
+      <option value="true">Published</option>
+      <option value="false">Unpublished</option>
+    </select>
+  </div>
+
+  <div class="table-card">
+    <app-table
+      [tableData]="filteredCourses()"
+      [columns]="columns"
+      [loading]="courseState.loading()"
+      [error]="courseState.error()"
+      [sortColumn]="tableService.sortColumn()"
+      [sortDir]="tableService.sortDirection()"
+      (view)="onView($event)"
+      (edit)="onEdit($event)"
+      (delete)="onDeleteRequest($event)"
+      (sort)="onSort($event)"
+      (toggleStatus)="onToggleStatus($event)"
+      (retry)="courseState.loadCourses()"
+    />
+  </div>
+
+  @if (!courseState.loading() && filteredCount() > tableService.pageSize()) {
+    <nav class="pagination" aria-label="Pagination">
+      <button
+        class="page-btn"
+        [disabled]="tableService.currentPage() === 1"
+        (click)="prevPage()"
+        type="button"
+        aria-label="Previous page"
+      >
+        ‹
+      </button>
+      @for (p of pageNumbers(); track p) {
+        <button
+          class="page-btn"
+          [class.page-btn--active]="p === tableService.currentPage()"
+          (click)="tableService.currentPage.set(p)"
+          type="button"
+          [attr.aria-current]="p === tableService.currentPage() ? 'page' : null"
+        >
+          {{ p }}
+        </button>
+      }
+      <button
+        class="page-btn"
+        [disabled]="tableService.currentPage() === totalPages()"
+        (click)="nextPage()"
+        type="button"
+        aria-label="Next page"
+      >
+        ›
+      </button>
+    </nav>
+  }
+</div>

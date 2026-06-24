@@ -1,0 +1,31 @@
+@switch (activeState()) {
+  @case ('loading') {
+    <div class="skeleton-wrapper" aria-busy="true" aria-label="Loading content">
+      <div class="skeleton-row"></div>
+      <div class="skeleton-row"></div>
+      <div class="skeleton-row"></div>
+    </div>
+  }
+  @case ('error') {
+    <div class="state-card state-error" role="alert">
+      <svg lucideAlertCircle class="state-icon state-icon--error" aria-hidden="true"></svg>
+      <h3 class="state-title">{{ errorTitle() }}</h3>
+      <p class="state-message">{{ error() }}</p>
+      <button class="btn btn-secondary" (click)="retry.emit()" type="button">
+        <svg lucideRotateCcw aria-hidden="true"></svg>
+        Try again
+      </button>
+    </div>
+  }
+  @case ('empty') {
+    <div class="state-card state-empty">
+      <svg lucideInbox class="state-icon state-icon--empty" aria-hidden="true"></svg>
+      <h3 class="state-title">{{ emptyTitle() }}</h3>
+      <p class="state-message">{{ emptyMessage() }}</p>
+      <ng-content select="[slot=emptyAction]" />
+    </div>
+  }
+  @case ('idle') {
+    <ng-content />
+  }
+}

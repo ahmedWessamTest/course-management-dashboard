@@ -1,0 +1,12 @@
+<div class="toast-container" aria-live="polite" aria-atomic="false">
+  @for (n of notificationService.notifications(); track n.id) {
+    <div class="toast" [class]="'toast--' + n.type" role="status">
+      <svg [lucideIcon]="iconFor(n)" class="toast-icon" aria-hidden="true"></svg>
+      <span class="toast-message">{{ n.message }}</span>
+      <button class="toast-dismiss" (click)="notificationService.dismiss(n.id)"
+        type="button" aria-label="Dismiss notification">
+        <svg lucideX aria-hidden="true"></svg>
+      </button>
+    </div>
+  }
+</div>

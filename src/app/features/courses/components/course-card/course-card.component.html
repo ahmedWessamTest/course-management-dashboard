@@ -1,0 +1,36 @@
+<article class="course-card">
+  <div class="course-card__thumb">
+    <img [src]="course().thumbnail" [alt]="course().title + ' thumbnail'"
+      loading="lazy" width="600" height="200" />
+    <div class="course-card__badge-wrap">
+      <app-badge [status]="course().status" />
+    </div>
+  </div>
+  <div class="course-card__body">
+    <p class="course-card__category">{{ course().category }}</p>
+    <h2 class="course-card__title">{{ course().title }}</h2>
+    <p class="course-card__instructor">By {{ course().instructor }}</p>
+    <p class="course-card__description">{{ course().description }}</p>
+
+    <div class="course-card__meta">
+      <span class="meta-item">
+        <svg lucideStar aria-hidden="true"></svg>
+        {{ course().rating }}
+      </span>
+      <span class="meta-item">
+        <svg lucideUsers aria-hidden="true"></svg>
+        {{ course().studentsCount }} students
+      </span>
+      <span class="meta-item">
+        <svg lucideClock aria-hidden="true"></svg>
+        {{ course().duration }}h
+      </span>
+      <span class="meta-item meta-item--price">\${{ course().price }}</span>
+    </div>
+
+    <button class="btn-edit" (click)="edit.emit(course())" type="button">
+      <svg lucidePencil aria-hidden="true"></svg>
+      Edit course
+    </button>
+  </div>
+</article>

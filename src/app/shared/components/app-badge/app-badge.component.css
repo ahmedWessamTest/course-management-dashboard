@@ -1,0 +1,14 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-icon { width: 12px; height: 12px; }
+.badge--published { background: var(--success-light); color: var(--success); }
+.badge--unpublished { background: var(--gray-100); color: var(--gray-500); }
