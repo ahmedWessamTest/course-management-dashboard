@@ -4,7 +4,7 @@ import { CourseFormPage } from '@features/courses/pages/course-form/course-form.
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog.service';
 
 export const dirtyFormGuard: CanDeactivateFn<CourseFormPage> = (component) => {
-  if (component.form.dirty) {
+  if (component.hasUnsavedChanges()) {
     const dialogService = inject(ConfirmationDialogService);
     return dialogService.confirm({
       title: 'Unsaved Changes',

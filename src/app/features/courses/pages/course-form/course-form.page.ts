@@ -81,8 +81,13 @@ export class CourseFormPage implements OnInit {
     status: [false],
   });
 
+  private _initialFormValue = this.form.getRawValue();
   private readonly titleValue = toSignal(this.form.get('title')!.valueChanges);
   private _slugManuallyEdited = false;
+
+  public hasUnsavedChanges(): boolean {
+    return JSON.stringify(this.form.getRawValue()) !== JSON.stringify(this._initialFormValue);
+  }
 
   constructor() {
     // Auto-generate slug from title unless user manually edited it
@@ -118,6 +123,7 @@ export class CourseFormPage implements OnInit {
           status: course.status,
         });
         this.form.markAsPristine(); // ✅ تنظيف الـ dirty state بعد التحميل
+        this._initialFormValue = this.form.getRawValue();
       }
     });
   }
@@ -180,6 +186,7 @@ export class CourseFormPage implements OnInit {
       next: () => {
         this.saving.set(false);
         this.form.markAsPristine(); // ✅ تنظيف الـ dirty state
+        this._initialFormValue = this.form.getRawValue();
         this.notificationService.success(
           this.isEditMode() ? 'Course updated successfully.' : 'Course created successfully.',
         );
