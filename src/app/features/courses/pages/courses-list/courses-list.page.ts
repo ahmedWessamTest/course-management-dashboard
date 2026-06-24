@@ -126,6 +126,10 @@ export class CoursesListPage implements OnInit {
       .subscribe((q) => this.tableService.setSearch(q));
   }
 
+  protected retryLoad(): void {
+    this.courseState.loadCourses().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+  }
+
   protected onSearch(event: Event): void {
     this.searchSubject.next((event.target as HTMLInputElement).value);
   }
