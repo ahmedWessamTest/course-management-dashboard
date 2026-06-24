@@ -1,5 +1,8 @@
 .page-container {
-  padding: 24px;
+  padding: 0.75rem;
+  @media screen and (min-width: 1024px) {
+    padding: 1.5rem;
+  }
   max-width: 900px;
   margin: 0 auto;
 }
